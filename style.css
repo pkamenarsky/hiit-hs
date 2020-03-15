@@ -1,0 +1,15 @@
+body {
+  background-color: #ccc;
+}
+
+.timer {
+  font-size: 144px;
+}
+
+.mode {
+  font-size: 36px;
+}
+
+.cycle {
+  font-size: 36px;
+}
