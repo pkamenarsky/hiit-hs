@@ -50,7 +50,10 @@ run port = do
     hiit
 
 static :: Wai.Middleware
-static = Static.staticPolicy $ Static.only [("style.css", "style.css")]
+static = Static.staticPolicy $ Static.only
+  [ ("style.css", "style.css")
+  , ("fonts/Muller-ExtraBold-DEMO.ttf", "fonts/Muller-ExtraBold-DEMO.ttf")
+  ]
 
 index :: HTML
 index =
@@ -109,7 +112,7 @@ data Cycle = Cycle
   }
 
 cycle :: Cycle -> Widget HTML ()
-cycle cycle = div []
+cycle cycle = div [ className "container" ]
   [ case duration cycle of
       Just t -> timer t
       Nothing -> display mempty
@@ -135,7 +138,7 @@ hiit ctx = do
     , (Nothing, cycle Cycle { duration = Just 5, mode = "JUMP", set = 1 })
     , (Nothing, cycle Cycle { duration = Just 3, mode = "REST", set = 1 })
 
-    , (Just 80, cycle Cycle { duration = Nothing, mode = "DONE", set = 0 })
+    , (Just 80, cycle Cycle { duration = Nothing, mode = "DONE!", set = 0 })
     ]
   where
     waitForCode ch ws = do

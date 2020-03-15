@@ -1,15 +1,50 @@
+@font-face {
+  font-family: 'Muller';
+  font-style: normal;
+  font-weight: 500;
+  src: url(fonts/Muller-ExtraBold-DEMO.ttf) format('truetype');
+}
+
 body {
   background-color: #ccc;
+  margin: 0px;
+  padding: 0px;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+
+  color: #333;
+
+  font-weight: 500;
+  font-family: 'Muller';
+  font-size: 48px;
+  text-transform: uppercase;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 288px 36px 36px 1fr;
+  width: 100vw;
+  height: 100vh;
+
+  text-align: center;
 }
 
 .timer {
-  font-size: 144px;
+  font-size: 288px;
+  grid-column: 2;
+  grid-row: 2;
 }
 
 .mode {
   font-size: 36px;
+  grid-column: 2;
+  grid-row: 3;
 }
 
 .cycle {
   font-size: 36px;
+  grid-column: 2;
+  grid-row: 4;
 }
