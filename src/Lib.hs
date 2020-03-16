@@ -61,7 +61,6 @@ index =
   , VNode "html" mempty Nothing
       [ VNode "head" mempty Nothing
           [ VLeaf "meta" (fl [("charset", AText "utf-8")]) Nothing
-          , VLeaf "meta" (fl [("viewport", AText "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0")]) Nothing
 
           , VNode "title" mempty Nothing [VText "HIIT"]
 
@@ -113,13 +112,13 @@ data Cycle = Cycle
   }
 
 cycle :: Cycle -> Widget HTML ()
-cycle cycle = div [ className "container" ]
+cycle cycle = pre [ className "container" ]
   [ case duration cycle of
       Just t -> timer t
       Nothing -> display mempty
 
-  , div [ className "mode" ] [ text (mode cycle) ]
-  , div [ className "cycle" ] [ text (intercalate " " $ replicate (set cycle) "●") ]
+  , pre [ className "mode" ] [ text (mode cycle) ]
+  , pre [ className "cycle" ] [ text (intercalate " " $ replicate (set cycle) "●") ]
   ]
 
 hiit :: Context -> Widget HTML ()
