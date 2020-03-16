@@ -61,6 +61,7 @@ index =
   , VNode "html" mempty Nothing
       [ VNode "head" mempty Nothing
           [ VLeaf "meta" (fl [("charset", AText "utf-8")]) Nothing
+          , VLeaf "meta" (fl [("viewport", AText "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0")]) Nothing
 
           , VNode "title" mempty Nothing [VText "HIIT"]
 
@@ -126,19 +127,19 @@ hiit ctx = do
   ch <- liftIO $ newKeypressChan ctx
 
   skippable ch
-    [ (Nothing, cycle Cycle { duration = Just 5, mode = "JUMP", set = 1 })
-    , (Nothing, cycle Cycle { duration = Just 3, mode = "REST", set = 1 })
+    [ (Nothing, cycle Cycle { duration = Just 5, mode = "SET 1 - JUMP", set = 1 })
+    , (Nothing, cycle Cycle { duration = Just 3, mode = "SET 1 - REST", set = 1 })
 
-    , (Nothing, cycle Cycle { duration = Just 5, mode = "JUMP", set = 2 })
-    , (Nothing, cycle Cycle { duration = Just 3, mode = "REST", set = 2 })
+    , (Nothing, cycle Cycle { duration = Just 5, mode = "SET 1 - JUMP", set = 2 })
+    , (Nothing, cycle Cycle { duration = Just 3, mode = "SET 1 - REST", set = 2 })
 
     -- p
     , (Just 80, cycle Cycle { duration = Just 3, mode = "PAUSE", set = 0 })
 
-    , (Nothing, cycle Cycle { duration = Just 5, mode = "JUMP", set = 1 })
-    , (Nothing, cycle Cycle { duration = Just 3, mode = "REST", set = 1 })
+    , (Nothing, cycle Cycle { duration = Just 5, mode = "SET 2 - JUMP", set = 1 })
+    , (Nothing, cycle Cycle { duration = Just 3, mode = "SET 2 - REST", set = 1 })
 
-    , (Just 80, cycle Cycle { duration = Nothing, mode = "DONE!", set = 0 })
+    , (Just 80, cycle Cycle { duration = Nothing, mode = "WELL DONE!", set = 0 })
     ]
   where
     waitForCode ch ws = do
@@ -149,7 +150,10 @@ hiit ctx = do
 
     skippable ch [] = pure ()
     skippable ch ((_, w):ws) = do
-      r <- fmap Left w <|> fmap Right (waitForCode ch ws)
+      r <- div [ fmap (const $ Right ws) onClick ]
+        [ fmap Left w
+        , fmap Right (waitForCode ch ws)
+        ]
 
       case r of
         Left _ -> skippable ch ws
