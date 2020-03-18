@@ -125,22 +125,25 @@ hiit :: Context -> Widget HTML ()
 hiit ctx = do
   ch <- liftIO $ newKeypressChan ctx
 
-  skippable ch
-    [ (Nothing, cycle Cycle { duration = Just 5, mode = "SET 1 - JUMP", set = 1 })
-    , (Nothing, cycle Cycle { duration = Just 3, mode = "SET 1 - REST", set = 1 })
-
-    , (Nothing, cycle Cycle { duration = Just 5, mode = "SET 1 - JUMP", set = 2 })
-    , (Nothing, cycle Cycle { duration = Just 3, mode = "SET 1 - REST", set = 2 })
-
-    -- p
-    , (Just 80, cycle Cycle { duration = Just 3, mode = "PAUSE", set = 0 })
-
-    , (Nothing, cycle Cycle { duration = Just 5, mode = "SET 2 - JUMP", set = 1 })
-    , (Nothing, cycle Cycle { duration = Just 3, mode = "SET 2 - REST", set = 1 })
-
-    , (Just 80, cycle Cycle { duration = Nothing, mode = "WELL DONE!", set = 0 })
+  skippable ch $ mconcat
+    [ sets
+    , [ (Just 80, cycle Cycle { duration = Nothing, mode = "WELL DONE!", set = 0 }) ]
     ]
   where
+    set s = mconcat
+      [ [ (Nothing, cycle Cycle { duration = Just 30, mode = "SET " <> pack (show s) <> " - JUMP", set = c })
+        , (Nothing, cycle Cycle { duration = Just 30, mode = "SET " <> pack (show s) <> " - REST", set = c })
+        ]
+      | c <- [1..10]
+      ]
+    sets = mconcat
+      [ mconcat
+          [ set s
+          , [ (Just 80, cycle Cycle { duration = Just 120, mode = "PAUSE", set = 0 }) ]
+          ]
+      | s <- [1..10]
+      ]
+
     waitForCode ch ws = do
       code <- liftIO $ readChan ch
       case dropWhile ((Just code /=) . fst) ws of
